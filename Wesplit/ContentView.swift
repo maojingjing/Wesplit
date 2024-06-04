@@ -28,7 +28,14 @@ struct ContentView: View {
                             Text("\($0) people")
                         }
                     }.pickerStyle(.navigationLink)
-                    TextField("Tip percentage", value: $tipPercentage, format: .number)
+                }
+                
+                Section("How much tip do you want to leave?") {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(tipPercentages, id:\.self) {
+                            Text($0, format:.percent)
+                        }
+                    }.pickerStyle(.segmented)
                 }
                 
                 Section {
