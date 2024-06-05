@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var tapCount = 0
-    @State private var name = ""
-    @State private var selectedStudent = "jingjing"
     @State private var checkAmount = 0.0
     @State private var numOfPeople = 1
     @State private var tipPercentage = 20
     let tipPercentages = [10, 15, 20, 25, 0]
     
-
-    let students: Array<String> = ["jingjing", "albert", "steven"]
+    //computed property
+    var totalPerPerson: Double {
+        let peopleCount = Double(numOfPeople + 2)
+        let tipSelection = Double(tipPercentage)
+        
+        let tipValue = checkAmount / 100 * tipSelection
+        let grandTotal = checkAmount + tipValue
+        let amountPerPerson = grandTotal / peopleCount
+        
+        return amountPerPerson
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -39,12 +46,23 @@ struct ContentView: View {
                 }
                 
                 Section {
-                      Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                  }
+                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                }
             }
             .navigationTitle("WeSplit")
         }
     }
+    
+    
+    func getPayment() -> Double {
+        print("checkamount \(checkAmount) tipPercentage \(tipPercentage) numOfPeople \(numOfPeople)")
+        let percentage = Double(1 + Double(tipPercentage)/100.0)
+        print(" percentage \(percentage)")
+        print(" total check \(checkAmount * percentage)" )
+        
+        return (checkAmount * percentage) / Double(numOfPeople + 2)
+    }
+    
 }
 
 #Preview {
